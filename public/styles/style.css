@@ -825,7 +825,7 @@
   background: none;
   transition: all var(--animation-duration-fast)
       var(--animation-curve-primary);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--border-radius-full); /* Make it circular for hover effect */
 }
  
 .navigation-menu {
@@ -841,19 +841,18 @@
   text-decoration: none;
 }
  
-.navigation-toggle-icon {
-  color: var(--color-on-surface);
-  display: block;
-  transition: all var(--animation-duration-fast)
-      var(--animation-curve-primary);
+.navigation-toggle-icon, .navigation-toggle-close {
+  transition: transform var(--animation-duration-standard) var(--animation-curve-primary),
+              opacity var(--animation-duration-standard) var(--animation-curve-primary);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
  
 .navigation-toggle-close {
-  top: 50%;
-  left: 50%;
-  display: none;
-  position: absolute;
-  transform: translate(-50%, -50%);
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(90deg);
 }
  
 .navigation-list {
@@ -949,18 +948,14 @@
 }
  
 .navigation-toggle:hover {
-  transform: scale(1.05);
-  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  background: var(--color-backplate); /* Add subtle background on hover */
+  transform: scale(1.1); /* Add a slight pop effect */
 }
  
 .navigation-toggle:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
- 
-
- 
-
  
 .navigation-link::before {
   left: 50%;
@@ -1016,8 +1011,6 @@
   box-shadow: var(--shadow-level-2);
 }
  
-
- 
 .navigation-overlay.navigation-overlay-active {
   opacity: 1;
   visibility: visible;
@@ -1058,8 +1051,6 @@
   align-items: center;
   justify-content: space-between;
 }
- 
-
  
 .footer-contact-info {
   display: flex;
@@ -1524,8 +1515,6 @@
   background: color-mix(in srgb, var(--color-surface) 85%, transparent);
 }
  
-
- 
 .preorder-actions {
   gap: var(--spacing-md);
   display: flex;
@@ -1547,8 +1536,6 @@
   font-size: var(--font-size-sm);
   font-style: italic;
 }
- 
-
  
 .detail-separator {
   color: var(--color-accent);
@@ -1584,8 +1571,6 @@
   padding-top: var(--spacing-xl);
 }
  
-
- 
 .form-group-full {
   grid-column: 1 / -1;
 }
@@ -1594,8 +1579,6 @@
   min-width: 200px;
   justify-self: start;
 }
- 
-
  
 .contact-location {
   color: var(--color-on-surface-secondary);
@@ -2184,11 +2167,39 @@
     padding: var(--spacing-sm) var(--spacing-md);
     min-height: 64px;
   }
+  .navigation-logo-text {
+    display: none; /* Hide the title on mobile */
+  }
+  .navigation-toggle {
+    display: flex; /* Show the hamburger menu */
+  }
+  .navigation-menu {
+    /* Change to a simple display toggle for reliability */
+    display: none;
+    position: absolute;
+    top: 100%; /* Position below the header */
+    left: 0;
+    width: 100%;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-level-2);
+    z-index: 1001;
+    
+    /* Keep flex styles for when it's visible */
+    flex-direction: column;
+    padding: var(--spacing-lg);
+  }
+
+  .navigation-toggle.navigation-toggle-active
+    .navigation-toggle-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
   .navigation-toggle.navigation-toggle-active .navigation-toggle-close {
-    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
   }
   .navigation-menu.navigation-menu-open {
-    right: 0;
+    display: flex; /* Show the menu */
   }
   .navigation-list {
     gap: var(--spacing-md);
@@ -2261,6 +2272,25 @@
   .thq-section-padding {
     padding: var(--dl-layout-space-threeunits);
   }
+  /* -- Start Logo Swap Styles -- */
+  /* Style for the logo when it's in the header on mobile */
+  .navigation-brand #hero-logo {
+    max-height: 40px; /* Make logo small in the header */
+    width: auto;
+    object-fit: contain;
+  }
+  /* Style for the title when it's in the hero on mobile */
+  .hero-title-container #brand-title {
+    font-size: clamp(3rem, 8vw, 4rem); /* Make it large like a hero title */
+    text-align: center;
+    line-height: 1.1;
+    display: block; /* Ensure it takes up space */
+  }
+  /* Hide the original desktop title container on mobile */
+  #desktop-title-container {
+    display: none;
+  }
+  /* -- End Logo Swap Styles -- */
   .thq-flex-column {
     gap: var(--dl-layout-space-oneandhalfunits);
   }
@@ -2365,6 +2395,9 @@
   .play-button {
     width: 4rem;
     height: 4rem;
+  }
+  .navigation-toggle {
+    padding: var(--spacing-xs);
   }
 }
  

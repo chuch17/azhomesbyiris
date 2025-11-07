@@ -99,9 +99,9 @@
             <div class="navigation-container6">
               <div class="navigation-container7">
                 <script defer="" data-name="luxury navigation">
-                  (function(){
+                  window.addEventListener('DOMContentLoaded', function(){
                     // Mobile navigation toggle functionality
-                    const navigationToggle = document.getElementById('navigation-toggle')
+                    const navigationToggle = document.querySelector('.navigation-toggle')
                     const navigationMenu = document.getElementById('navigation-menu')
                     const body = document.body
 
@@ -226,7 +226,7 @@
                         isScrolling = true
                       }
                     })
-                  })()
+                  })
                 </script>
               </div>
             </div>
