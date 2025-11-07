@@ -1,0 +1,108 @@
+body {
+    background-color: var(--color-surface);
+    font-family: var(--font-family-body);
+    margin: 0;
+}
+ 
+.admin-container {
+  display: flex;
+  flex-direction: column;
+    min-height: 100vh;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+}
+ 
+.admin-container1 {
+  display: flex;
+  align-items: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-3xl);
+    padding-left: var(--spacing-lg);
+}
+
+.admin-image {
+    height: 4rem;
+}
+
+.admin-text.section-title {
+    margin-bottom: 0;
+}
+
+.admin-forms-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-3xl);
+    max-width: var(--content-max-width);
+  width: 100%;
+    margin: 0 auto;
+}
+
+.admin-form-section {
+    background-color: var(--color-surface-elevated);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-level-2);
+    border: 1px solid var(--color-outline);
+}
+
+.admin-form-section .section-title {
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--spacing-lg);
+}
+
+.admin-services-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.video-entry {
+  border: 1px solid var(--color-outline);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.video-entry-title {
+  font-size: var(--font-size-md);
+  font-weight: 500;
+}
+
+.delete-video-btn {
+  background: none;
+  border: none;
+  color: var(--color-neutral);
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.delete-video-btn:hover {
+  color: var(--color-primary);
+}
+
+/* Re-using homepage form styles */
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-surface);
+    transition: all var(--animation-duration-fast) var(--animation-curve-primary);
+}
+
+.form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 15%, transparent);
+}

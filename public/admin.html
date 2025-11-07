@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Admin - AZhomesiris</title>
+    <meta property="og:title" content="Admin - AZhomesiris" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta property="twitter:card" content="summary_large_image" />
+
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;  -webkit-text-size-adjust: 100%; }  body {  margin: 0; }  * {  box-sizing: border-box;  border-width: 0;  border-style: solid; }  p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0; }  button {  background-color: transparent; }  button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0; }  button,select {  text-transform: none; }  button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button; }  button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0; }  button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText; }  a {  color: inherit;  text-decoration: inherit; }  input {  padding: 2px 4px; }  img {  display: block; }  html { scroll-behavior: smooth  }
+    </style>
+    <style data-tag="default-style-sheet">
+      html {
+        font-family: Inter;
+        font-size: 16px;
+      }
+
+      body {
+        font-weight: 400;
+        font-style:normal;
+        text-decoration: none;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.15;
+        color: var(--dl-color-gray-black);
+        background-color: var(--dl-color-gray-white);
+
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+  </head>
+  <body>
+    <link rel="stylesheet" href="styles/style.css" />
+    <link href="styles/index.css" rel="stylesheet" />
+      <link href="styles/admin.css" rel="stylesheet" />
+    <div class="admin-container">
+      <div class="admin-container1" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <h1 class="admin-text section-title">Admin Panel</h1>
+        <a href="/api/auth/logout" class="btn btn-secondary">Logout</a>
+      </div>
+
+      <div class="admin-forms-container">
+        <div id="ContactForm1" class="admin-form-section">
+          <h2 class="section-title">Hero</h2>
+          <form class="thq-card" id="hero-settings-form" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="hero-video-input" class="form-label">
+                Hero Video
+              </label>
+              <input
+                type="file"
+                id="hero-video-input"
+                class="form-input"
+                name="video"
+                accept="video/mp4,video/webm"
+              />
+              </div>
+            <div class="form-group">
+              <label for="hero-logo-input" class="form-label">Logo</label>
+              <input type="file" id="hero-logo-input" placeholder="Logo" class="form-input" name="logo" accept="image/*" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <div id="hero-save-status" style="margin-top: 8px; font-size: 0.95rem"></div>
+          </form>
+          </div>
+        
+        <div id="ContactForm2" class="admin-form-section">
+            <h2 class="section-title">Services</h2>
+            <form id="services-form" enctype="multipart/form-data">
+              <div class="admin-services-columns">
+                  <div class="form-group-column">
+                      <div class="form-group">
+                          <label for="service-buying-title" class="form-label">Buying</label>
+                          <input type="text" id="service-buying-title" required="true" placeholder="Title" class="form-input" />
+              </div>
+                      <div class="form-group">
+                        <label for="service-buying-photo-input" class="form-label">Photo</label>
+                        <input type="file" id="service-buying-photo-input" name="service-buying-photo" accept="image/*" class="form-input" />
+                        <img id="service-buying-photo-preview" alt="Buying photo preview" style="max-width: 100%; margin-top: 10px; border-radius: 4px; display: none;" />
+              </div>
+                      <div class="form-group">
+                          <label for="service-buying-message" class="form-label">Message</label>
+                          <textarea id="service-buying-message" rows="3" placeholder="Enter your message" class="form-textarea"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group-column">
+                      <div class="form-group">
+                          <label for="service-selling-title" class="form-label">Selling</label>
+                          <input type="text" id="service-selling-title" required="true" placeholder="Title" class="form-input" />
+                  </div>
+                      <div class="form-group">
+                        <label for="service-selling-photo-input" class="form-label">Photo</label>
+                        <input type="file" id="service-selling-photo-input" name="service-selling-photo" accept="image/*" class="form-input" />
+                        <img id="service-selling-photo-preview" alt="Selling photo preview" style="max-width: 100%; margin-top: 10px; border-radius: 4px; display: none;" />
+                </div>
+                      <div class="form-group">
+                          <label for="service-selling-message" class="form-label">Message</label>
+                          <textarea id="service-selling-message" rows="3" placeholder="Enter your message" class="form-textarea"></textarea>
+                </div>
+              </div>
+                  <div class="form-group-column">
+                      <div class="form-group">
+                          <label for="service-invest-title" class="form-label">Invest</label>
+                          <input type="text" id="service-invest-title" required="true" placeholder="Title" class="form-input" />
+                </div>
+                      <div class="form-group">
+                        <label for="service-invest-photo-input" class="form-label">Photo</label>
+                        <input type="file" id="service-invest-photo-input" name="service-invest-photo" accept="image/*" class="form-input" />
+                        <img id="service-invest-photo-preview" alt="Investing photo preview" style="max-width: 100%; margin-top: 10px; border-radius: 4px; display: none;" />
+                    </div>
+                      <div class="form-group">
+                          <label for="service-invest-message" class="form-label">Message</label>
+                          <textarea id="service-invest-message" rows="3" placeholder="Enter your message" class="form-textarea"></textarea>
+                    </div>
+                  </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem;">Save Settings</button>
+              <div id="services-save-status" style="margin-top: 8px; font-size: 0.95rem"></div>
+              </form>
+                </div>
+
+        <div id="ContactForm21" class="admin-form-section">
+          <h2 class="section-title">Testimonials Settings</h2>
+          <form id="testimonials-form">
+            <div class="admin-services-columns">
+              <div id="testimonial-1-admin" class="form-group-column">
+                <div class="form-group">
+                  <label for="testimonial-1-name" class="form-label">Name 1</label>
+                  <input type="text" id="testimonial-1-name" placeholder="Name" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label for="testimonial-1-company" class="form-label">Company 1</label>
+                  <input type="text" id="testimonial-1-company" placeholder="Company" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label for="testimonial-1-message" class="form-label">Message 1</label>
+                  <textarea id="testimonial-1-message" rows="3" placeholder="Enter testimonial" class="form-textarea"></textarea>
+                </div>
+              </div>
+              <div id="testimonial-2-admin" class="form-group-column">
+                <div class="form-group">
+                  <label for="testimonial-2-name" class="form-label">Name 2</label>
+                  <input type="text" id="testimonial-2-name" placeholder="Name" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label for="testimonial-2-company" class="form-label">Company 2</label>
+                  <input type="text" id="testimonial-2-company" placeholder="Company" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label for="testimonial-2-message" class="form-label">Message 2</label>
+                  <textarea id="testimonial-2-message" rows="3" placeholder="Enter testimonial" class="form-textarea"></textarea>
+                </div>
+                </div>
+              <div id="testimonial-3-admin" class="form-group-column">
+                <div class="form-group">
+                  <label for="testimonial-3-name" class="form-label">Name 3</label>
+                  <input type="text" id="testimonial-3-name" placeholder="Name" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label for="testimonial-3-company" class="form-label">Company 3</label>
+                  <input type="text" id="testimonial-3-company" placeholder="Company" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label for="testimonial-3-message" class="form-label">Message 3</label>
+                  <textarea id="testimonial-3-message" rows="3" placeholder="Enter testimonial" class="form-textarea"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 1.5rem;">
+              <label for="testimonial-show" class="form-label">
+                <input type="checkbox" id="testimonial-show" style="margin-right: 0.5rem;" />
+                Show on Portfolio
+                      </label>
+                    </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <div id="testimonials-save-status" style="margin-top: 8px; font-size: 0.95rem"></div>
+                </form>
+                    </div>
+
+        <div id="ContactForm11" class="admin-form-section">
+          <h2 class="section-title">E-Mail Settings</h2>
+          <form class="thq-card" id="email-settings-form">
+            <div class="form-group">
+              <label for="contact-form-3-app-password" class="form-label">App Password</label>
+              <input type="password" id="contact-form-3-app-password" required="true" placeholder="App Password" class="form-input" />
+                    </div>
+            <div class="form-group">
+              <label for="contact-form-3-sender-email" class="form-label">Sender Email</label>
+              <input type="email" id="contact-form-3-sender-email" required="true" placeholder="Sender Email" class="form-input" />
+                  </div>
+            <div class="form-group">
+              <label for="contact-form-3-recipient-email" class="form-label">Recipient Email</label>
+              <input type="email" id="contact-form-3-recipient-email" required="true" placeholder="Recipient Email" class="form-input" />
+                    </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <div id="email-settings-status" style="margin-top: 1rem;"></div>
+                </form>
+                    </div>
+
+        <div id="ContactForm12" class="admin-form-section">
+          <h2 class="section-title">Video Gallery Settings</h2>
+          <form id="video-gallery-form" class="thq-card">
+            <div class="admin-services-columns">
+              <div class="form-group-column">
+                <h3 class="video-entry-title">Video 1</h3>
+                <div class="form-group">
+                  <label for="video-1-title-input" class="form-label">Title</label>
+                  <input type="text" id="video-1-title-input" placeholder="Video Title" class="form-input" />
+                    </div>
+                <div class="form-group">
+                  <label for="video-1-url-input" class="form-label">Video URL</label>
+                  <input type="text" id="video-1-url-input" placeholder="YouTube, TikTok, or direct URL" class="form-input" />
+                  <div id="video-1-preview" class="form-text-preview"></div>
+                  </div>
+                <div class="form-group">
+                  <label for="video-1-duration-input" class="form-label">Video Duration (seconds)</label>
+                  <input type="number" id="video-1-duration-input" min="1" placeholder="e.g., 30" class="form-input" />
+                  </div>
+              </div>
+              <div class="form-group-column">
+                <h3 class="video-entry-title">Video 2</h3>
+                <div class="form-group">
+                  <label for="video-2-title-input" class="form-label">Title</label>
+                  <input type="text" id="video-2-title-input" placeholder="Video Title" class="form-input" />
+            </div>
+                <div class="form-group">
+                  <label for="video-2-url-input" class="form-label">Video URL</label>
+                  <input type="text" id="video-2-url-input" placeholder="YouTube, TikTok, or direct URL" class="form-input" />
+                  <div id="video-2-preview" class="form-text-preview"></div>
+          </div>
+                <div class="form-group">
+                  <label for="video-2-duration-input" class="form-label">Video Duration (seconds)</label>
+                  <input type="number" id="video-2-duration-input" min="1" placeholder="e.g., 30" class="form-input" />
+                </div>
+              </div>
+              <div class="form-group-column">
+                <h3 class="video-entry-title">Video 3</h3>
+                <div class="form-group">
+                  <label for="video-3-title-input" class="form-label">Title</label>
+                  <input type="text" id="video-3-title-input" placeholder="Video Title" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label for="video-3-url-input" class="form-label">Video URL</label>
+                  <input type="text" id="video-3-url-input" placeholder="YouTube, TikTok, or direct URL" class="form-input" />
+                  <div id="video-3-preview" class="form-text-preview"></div>
+                </div>
+                <div class="form-group">
+                  <label for="video-3-duration-input" class="form-label">Video Duration (seconds)</label>
+                  <input type="number" id="video-3-duration-input" min="1" placeholder="e.g., 30" class="form-input" />
+                </div>
+              </div>
+              <div class="form-group-column">
+                <h3 class="video-entry-title">Video 4</h3>
+                <div class="form-group">
+                  <label for="video-4-title-input" class="form-label">Title</label>
+                  <input type="text" id="video-4-title-input" placeholder="Video Title" class="form-input" />
+                    </div>
+                <div class="form-group">
+                  <label for="video-4-url-input" class="form-label">Video URL</label>
+                  <input type="text" id="video-4-url-input" placeholder="YouTube, TikTok, or direct URL" class="form-input" />
+                  <div id="video-4-preview" class="form-text-preview"></div>
+                  </div>
+                <div class="form-group">
+                  <label for="video-4-duration-input" class="form-label">Video Duration (seconds)</label>
+                  <input type="number" id="video-4-duration-input" min="1" placeholder="e.g., 30" class="form-input" />
+                  </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem;">Save Settings</button>
+            <div id="video-gallery-save-status" style="margin-top: 8px; font-size: 0.95rem"></div>
+          </form>
+          </div>
+
+        <div id="ContactForm22" class="admin-form-section">
+          <h2 class="section-title">About Me Settings</h2>
+                <form id="about-me-form" class="thq-card" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="about-me-title" class="form-label">Section Title</label>
+              <input type="text" id="about-me-title" required="true" placeholder="Section Title" class="form-input" />
+                    </div>
+            <div class="form-group">
+              <label for="about-me-photo" class="form-label">Photo</label>
+              <input type="file" id="about-me-photo" name="photo" accept="image/*" class="form-input" />
+              <img id="about-me-photo-preview" alt="About me photo preview" style="max-width: 100%; margin-top: 10px; border-radius: 4px; display: none;" />
+                    </div>
+            <div class="form-group">
+              <label for="about-me-description" class="form-label">Description</label>
+              <textarea id="about-me-description" rows="3" placeholder="Enter your message" class="form-textarea"></textarea>
+                    </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <div id="about-me-save-status" style="margin-top: 8px; font-size: 0.95rem"></div>
+                </form>
+              </div>
+
+        <div id="ContactForm13" class="admin-form-section">
+          <h2 class="section-title">Social Media Links Settings</h2>
+          <form id="social-media-form" class="thq-card">
+            <div class="form-group">
+              <label for="social-media-facebook" class="form-label">Facebook</label>
+              <input type="text" id="social-media-facebook" placeholder="Facebook URL" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="social-media-instagram" class="form-label">Instagram</label>
+              <input type="text" id="social-media-instagram" placeholder="Instagram URL" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label for="social-media-tiktok" class="form-label">TikTok</label>
+              <input type="text" id="social-media-tiktok" placeholder="TikTok URL" class="form-input" />
+          </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <div id="social-media-save-status" style="margin-top: 8px; font-size: 0.95rem"></div>
+          </form>
+          </div>
+
+          <div id="phone-settings-section" class="admin-form-section">
+            <h2 class="section-title">Phone Number Settings</h2>
+            <form id="phone-settings-form" class="thq-card">
+              <div class="form-group">
+                <label for="phone-number-input" class="form-label">Contact Phone Number</label>
+                <input type="tel" id="phone-number-input" placeholder="Enter phone number" class="form-input" />
+              </div>
+              <button type="submit" class="btn btn-primary">Save Settings</button>
+              <div id="phone-save-status" style="margin-top: 8px; font-size: 0.95rem"></div>
+            </form>
+          </div>
+
+          <div id="security-settings-section" class="admin-form-section">
+            <h2 class="section-title">Security Settings</h2>
+            <form id="security-settings-form" class="thq-card">
+              <div class="form-group">
+                <label for="security-email-input" class="form-label">Admin Email</label>
+                <input type="email" id="security-email-input" placeholder="Enter new admin email" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label for="security-password-input" class="form-label">New Password</label>
+                <input type="password" id="security-password-input" placeholder="Leave blank to keep current" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label for="security-confirm-password-input" class="form-label">Confirm New Password</label>
+                <input type="password" id="security-confirm-password-input" placeholder="Confirm new password" class="form-input" />
+              </div>
+              <button type="submit" class="btn btn-primary">Update Credentials</button>
+              <div id="security-save-status" style="margin-top: 8px; font-size: 0.95rem"></div>
+            </form>
+          </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const emailSettingsForm = document.getElementById('email-settings-form');
+        const statusDiv = document.getElementById('email-settings-status');
+        
+        const appPasswordInput = document.getElementById('contact-form-3-app-password');
+        const senderEmailInput = document.getElementById('contact-form-3-sender-email');
+        const recipientEmailInput = document.getElementById('contact-form-3-recipient-email');
+
+        // Load existing settings
+        fetch('/api/email/settings')
+          .then(response => response.json())
+          .then(data => {
+            if (data) {
+              senderEmailInput.value = data.senderEmail || '';
+              recipientEmailInput.value = data.recipientEmail || '';
+              if (data.hasPassword) {
+                appPasswordInput.placeholder = '******** (leave blank to keep current)';
+              }
+            }
+          })
+          .catch(error => console.error('Error fetching email settings:', error));
+
+        emailSettingsForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          statusDiv.textContent = 'Verifying and saving...';
+          statusDiv.style.color = 'inherit';
+
+          const appPassword = appPasswordInput.value;
+          const senderEmail = senderEmailInput.value;
+          const recipientEmail = recipientEmailInput.value;
+          
+          fetch('/api/email/settings/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              appPassword,
+              senderEmail,
+              recipientEmail,
+            }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              statusDiv.textContent = '✅ Verified and saved successfully';
+              statusDiv.style.color = 'green';
+              appPasswordInput.value = '';
+              appPasswordInput.placeholder = '******** (leave blank to keep current)';
+            } else {
+              statusDiv.textContent = `❌ Failed to verify credentials. Please check your Gmail App Password and try again.`;
+              statusDiv.style.color = 'red';
+            }
+          })
+          .catch(error => {
+            statusDiv.textContent = 'An unexpected error occurred.';
+            statusDiv.style.color = 'red';
+            console.error('Error saving email settings:', error);
+          });
+        });
+      });
+    </script>
+  </body>
+  <script src="scripts/heroSection.js" defer></script>
+  <script src="scripts/testimonials.js" defer></script>
+  <script src="scripts/services.js" defer></script>
+  <script src="scripts/videoGallery.js" defer></script>
+  <script src="scripts/aboutMe.js" defer></script>
+  <script src="scripts/socialMedia.js" defer></script>
+  <script src="scripts/phone.js" defer></script>
+  <script src="scripts/security.js" defer></script>
+</html>

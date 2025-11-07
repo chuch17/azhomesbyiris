@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dutiful Helpful Sandpiper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta property="twitter:card" content="summary_large_image" />
+
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;  -webkit-font-smoothing: antialiased;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;  color: inherit;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}pre {  white-space: normal;}input {  padding: 2px 4px;}img {  display: block;}details {  display: block;  margin: 0;  padding: 0;}summary::-webkit-details-marker {  display: none;}[data-thq="accordion"] [data-thq="accordion-content"] {  max-height: 0;  overflow: hidden;  transition: max-height 0.3s ease-in-out;  padding: 0;}[data-thq="accordion"] details[data-thq="accordion-trigger"][open] + [data-thq="accordion-content"] {  max-height: 1000vh;}details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {  transform: rotate(180deg);}html { scroll-behavior: smooth  }
+    </style>
+    <style data-tag="default-style-sheet">
+      html {
+        font-family: Inter;
+        font-size: 16px;
+      }
+
+      body {
+        font-weight: 400;
+        font-style:normal;
+        text-decoration: none;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.15;
+        color: var(--color-on-surface);
+        background: var(--color-surface);
+
+        fill: var(--color-on-surface);
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/animate.css@4.1.1/animate.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+  </head>
+  <body>
+    <link rel="stylesheet" href="../styles/style.css" />
+    <div>
+      <link href="../styles/footer.css" rel="stylesheet" />
+      <div class="footer-container1">
+        <div class="footer-container2">
+          <div class="footer-container3">
+            <script defer="" data-name="footer section">
+              (function(){
+                const form = document.getElementById('footerContactForm')
+
+                form.addEventListener('submit', function (e) {
+                  e.preventDefault()
+
+                  const submitButton = form.querySelector('.footer-form-submit')
+                  const originalText = submitButton.innerHTML
+
+                  // Show loading state
+                  submitButton.innerHTML = '<span>Sending...</span>'
+                  submitButton.disabled = true
+
+                  // Simulate form submission
+                  setTimeout(() => {
+                    // Show success state
+                    submitButton.innerHTML = '<span>Message Sent!</span>'
+                    submitButton.style.background = 'var(--color-accent)'
+
+                    // Reset form
+                    form.reset()
+
+                    // Reset button after 2 seconds
+                    setTimeout(() => {
+                      submitButton.innerHTML = originalText
+                      submitButton.disabled = false
+                      submitButton.style.background = ''
+                    }, 2000)
+                  }, 1500)
+                })
+
+                // Add subtle animation to contact items on scroll
+                const contactItems = document.querySelectorAll('.footer-contact-item')
+                const observer = new IntersectionObserver(
+                  (entries) => {
+                    entries.forEach((entry) => {
+                      if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1'
+                        entry.target.style.transform = 'translateY(0)'
+                      }
+                    })
+                  },
+                  { threshold: 0.1 }
+                )
+
+                contactItems.forEach((item, index) => {
+                  item.style.opacity = '0'
+                  item.style.transform = 'translateY(20px)'
+                  item.style.transition = `opacity 0.6s ease ${
+                    index * 0.1
+                  }s, transform 0.6s ease ${index * 0.1}s`
+                  observer.observe(item)
+                })
+              })()
+            </script>
+          </div>
+        </div>
+        <footer class="footer-section">
+          <div class="footer-content">
+            <div class="footer-main">
+              <div class="footer-brand">
+                <h2 class="footer-brand-name">AZ Homes by Iris</h2>
+                <p class="footer-brand-tagline">
+                  Helping You find Your Dream Home
+                </p>
+                <div class="footer-social">
+                  <a href="#">
+                    <div aria-label="Instagram" class="footer-social-link">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <g
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                        >
+                          <rect
+                            width="20"
+                            height="20"
+                            x="2"
+                            y="2"
+                            rx="5"
+                            ry="5"
+                          ></rect>
+                          <path
+                            d="M16 11.37A4 4 0 1 1 12.63 8A4 4 0 0 1 16 11.37m1.5-4.87h.01"
+                          ></path>
+                        </g>
+                      </svg>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div aria-label="Facebook" class="footer-social-link">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </a>
+                  <a href="#">
+                    <div aria-label="Twitter" class="footer-social-link">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6c2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4c-.9-4.2 4-6.6 7-3.8c1.1 0 3-1.2 3-1.2"
+                        ></path>
+                      </svg>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="footer-contact-info">
+                <h3 class="footer-section-title">Get in Touch</h3>
+                <div class="footer-contact-item">
+                  <div class="footer-contact-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
+                      <g
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="m22 7l-8.991 5.727a2 2 0 0 1-2.009 0L2 7"
+                        ></path>
+                        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                      </g>
+                    </svg>
+                  </div>
+                  <span class="footer-contact-text">
+                    azhomesbyiris@gmail.com
+                  </span>
+                </div>
+                <div class="footer-contact-item">
+                  <div class="footer-contact-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233a14 14 0 0 0 6.392 6.384"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="footer-contact-text">+1 (602) 575-0999</span>
+                </div>
+                <div class="footer-contact-item">
+                  <div class="footer-contact-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
+                      <g
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                        ></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </g>
+                    </svg>
+                  </div>
+                  <span class="footer-contact-text">Phoenix, CA</span>
+                </div>
+              </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+              <div class="footer-links">
+                <a href="#">
+                  <div class="footer-footer-link1 footer-link"></div>
+                </a>
+                <a href="#">
+                  <div class="footer-footer-link2 footer-link"></div>
+                </a>
+                <a href="#">
+                  <div class="footer-footer-link3 footer-link"></div>
+                </a>
+              </div>
+              <p class="footer-copyright">© 2022 Character. All Rights Reserved.</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

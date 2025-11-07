@@ -1,0 +1,381 @@
+.contact-form12-contact1 {
+  display: flex;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+}
+ 
+.contact-form12-max-width {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+ 
+.contact-form12-container1 {
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+ 
+.contact-form12-section-title {
+  align-self: flex-start;
+}
+ 
+.contact-form12-container2 {
+  gap: var(--dl-layout-space-oneandhalfunits);
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
+}
+ 
+.contact-form12-input10 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input10 {
+  flex: 1;
+}
+ 
+.contact-form12-input11 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input11 {
+  flex: 1;
+}
+ 
+.contact-form12-button1 {
+  align-self: flex-start;
+}
+ 
+.contact-form12-container3 {
+  gap: var(--dl-layout-space-oneandhalfunits);
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
+}
+ 
+.contact-form12-input12 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input12 {
+  flex: 1;
+}
+ 
+.contact-form12-input13 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input13 {
+  flex: 1;
+}
+ 
+.contact-form12-button2 {
+  align-self: flex-start;
+}
+ 
+.contact-form12-container4 {
+  gap: var(--dl-layout-space-oneandhalfunits);
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
+}
+ 
+.contact-form12-input14 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input14 {
+  flex: 1;
+}
+ 
+.contact-form12-input15 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input15 {
+  flex: 1;
+}
+ 
+.contact-form12-button3 {
+  align-self: flex-start;
+}
+ 
+.contact-form12-container5 {
+  gap: var(--dl-layout-space-oneandhalfunits);
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
+}
+ 
+.contact-form12-input16 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input16 {
+  flex: 1;
+}
+ 
+.contact-form12-input17 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input17 {
+  flex: 1;
+}
+ 
+.contact-form12-button4 {
+  align-self: flex-start;
+}
+ 
+.contact-form12-container6 {
+  gap: var(--dl-layout-space-oneandhalfunits);
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
+}
+ 
+.contact-form12-input18 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input18 {
+  flex: 1;
+}
+ 
+.contact-form12-input19 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input19 {
+  flex: 1;
+}
+ 
+.contact-form12-button5 {
+  align-self: flex-start;
+}
+ 
+.contact-form12-container7 {
+  gap: var(--dl-layout-space-oneandhalfunits);
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
+}
+ 
+.contact-form12-input20 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input20 {
+  flex: 1;
+}
+ 
+.contact-form12-input21 {
+  width: 100%;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+ 
+.contact-form12-text-input21 {
+  flex: 1;
+}
+ 
+.contact-form12-button6 {
+  align-self: flex-start;
+}
+ 
+.contact-form12-fragment10 {
+  display: contents;
+}
+ 
+.contact-form12-text29 {
+  display: inline-block;
+}
+ 
+.contact-form12-fragment11 {
+  display: contents;
+}
+ 
+.contact-form12-text30 {
+  display: inline-block;
+}
+ 
+.contact-form12-fragment12 {
+  display: contents;
+}
+ 
+.contact-form12-text31 {
+  display: inline-block;
+  font-size: 18px;
+}
+ 
+.contact-form12-fragment13 {
+  display: contents;
+}
+ 
+.contact-form12-text32 {
+  display: inline-block;
+  font-size: 18px;
+}
+ 
+.contact-form12-fragment14 {
+  display: contents;
+}
+ 
+.contact-form12-text33 {
+  display: inline-block;
+}
+ 
+.contact-form12-fragment15 {
+  display: contents;
+}
+ 
+.contact-form12-text34 {
+  display: inline-block;
+  font-size: 18px;
+}
+ 
+.contact-form12-fragment16 {
+  display: contents;
+}
+ 
+.contact-form12-text35 {
+  display: inline-block;
+}
+ 
+.contact-form12-fragment17 {
+  display: contents;
+}
+ 
+.contact-form12-text36 {
+  display: inline-block;
+  font-size: 18px;
+}
+ 
+.contact-form12-fragment18 {
+  display: contents;
+}
+ 
+.contact-form12-text37 {
+  display: inline-block;
+}
+ 
+.contact-form12-fragment19 {
+  display: contents;
+}
+ 
+.contact-form12-text38 {
+  display: inline-block;
+  font-size: 18px;
+}
+ 
+.contact-form12-fragment20 {
+  display: contents;
+}
+ 
+.contact-form12-text39 {
+  display: inline-block;
+}
+ 
+.contact-form12-fragment21 {
+  display: contents;
+}
+ 
+.contact-form12-text40 {
+  display: inline-block;
+  font-size: 18px;
+}
+ 
+.contact-form12-fragment22 {
+  display: contents;
+}
+ 
+.contact-form12-text41 {
+  display: inline-block;
+}
+ 
+@media(max-width: 991px) {
+  .contact-form12-input10 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input11 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input12 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input13 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input14 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input15 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input16 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input17 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input18 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input19 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input20 {
+    align-items: center;
+    flex-direction: row;
+  }
+  .contact-form12-input21 {
+    align-items: center;
+    flex-direction: row;
+  }
+}
