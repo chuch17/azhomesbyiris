@@ -1292,6 +1292,9 @@
  
 .hero-section {
   height: 100vh;
+  /* Use dvh to account for mobile browser UI, fixing the scroll glitch */
+  height: 100svh;
+  height: 100dvh;
   display: flex;
   overflow: hidden;
   position: relative;
@@ -2171,6 +2174,11 @@
 @media(max-width: 991px) {
   .thq-grid-4 {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+  .navigation {
+    /* Adjust padding for smaller screens */
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
   }
   .navigation-container {
     padding: var(--spacing-sm) var(--spacing-md);
