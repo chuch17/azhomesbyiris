@@ -2,12 +2,12 @@
   "buying": {
     "title": " Find Your Home",
     "message": " I'm here to help you find the right home that feels cozy and truly yours.\r\n",
-    "photo": "/uploads/service-buying-photo-1762388483125.jpg"
+    "photo": "/uploads/services/service-buying-photo-1762388483125.jpg"
   },
   "selling": {
     "title": "Stress-Free Selling",
     "message": "Selling a home can feel overwhelming, but you don’t have to do it alone. I’ll guide you and help carry the load.\r\n",
-    "photo": "/uploads/service-selling-photo-1762388483130.png"
+    "photo": "/uploads/services/service-selling-photo-1762388483130.png"
   },
   "investing": {
     "title": "Discover Opportunity",
@@ -17,6 +17,6 @@
   "invest": {
     "title": "Discover Opportunity",
     "message": "I’ll help you uncover investment opportunities, from distressed homes to flips, so you can grow your portfolio wisely.\r\n",
-    "photo": "/uploads/service-invest-photo-1762388483184.png"
+    "photo": "/uploads/services/service-invest-photo-1762388483184.png"
   }
 }
