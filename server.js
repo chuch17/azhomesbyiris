@@ -243,20 +243,37 @@ app.get('/api/auth/logout', (req, res) => {
 // -- Nodemailer Endpoints --
 const nodemailer = require('nodemailer');
 
+async function resolveEmailSettings() {
+    const fileConfig = await readConfig('emailSettings');
+    return {
+        senderEmail: process.env.EMAIL_SENDER || fileConfig.senderEmail || '',
+        appPassword: process.env.EMAIL_APP_PASSWORD || fileConfig.appPassword || '',
+        recipientEmail: process.env.EMAIL_RECIPIENT || fileConfig.recipientEmail || '',
+        host: process.env.EMAIL_SMTP_HOST || 'smtp.gmail.com',
+        port: Number(process.env.EMAIL_SMTP_PORT || 465),
+    };
+}
+
 async function createTransporter() {
     try {
-        const emailConfig = await readConfig('emailSettings');
-        if (!emailConfig.senderEmail || !emailConfig.appPassword) {
-            console.error('Email settings are not configured.');
+        const emailConfig = await resolveEmailSettings();
+
+        if (!emailConfig.senderEmail || !emailConfig.appPassword || !emailConfig.recipientEmail) {
+            console.error('Email settings are incomplete. senderEmail/appPassword/recipientEmail are required.');
             return null;
         }
-        return nodemailer.createTransport({
-            service: 'gmail',
+
+        const transporter = nodemailer.createTransport({
+            host: emailConfig.host,
+            port: emailConfig.port,
+            secure: emailConfig.port === 465,
             auth: {
                 user: emailConfig.senderEmail,
                 pass: emailConfig.appPassword,
             },
         });
+
+        return { transporter, emailConfig };
     } catch (error) {
         console.error('Failed to create Nodemailer transporter:', error);
         return null;
@@ -266,22 +283,25 @@ async function createTransporter() {
 app.post('/api/email/contact', async (req, res) => {
     try {
         const { name, email, phone, message, interests } = req.body;
-        const transporter = await createTransporter();
-        if (!transporter) {
+        const mailContext = await createTransporter();
+        if (!mailContext) {
             return res.status(500).json({ error: 'Email service is not configured.' });
         }
-        const emailConfig = await readConfig('emailSettings');
+
+        const { transporter, emailConfig } = mailContext;
+        const safeInterests = Array.isArray(interests) ? interests : [];
 
         await transporter.sendMail({
             from: `"${name}" <${emailConfig.senderEmail}>`,
             to: emailConfig.recipientEmail,
+            replyTo: email,
             subject: 'New Contact Form Submission from AZHomesbyIris',
             html: `
                 <h3>New Contact Form Submission</h3>
                 <p><strong>Name:</strong> ${name}</p>
                 <p><strong>Email:</strong> ${email}</p>
                 <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
-                <p><strong>Interests:</strong> ${interests.join(', ') || 'None specified'}</p>
+                <p><strong>Interests:</strong> ${safeInterests.length ? safeInterests.join(', ') : 'None specified'}</p>
                 <p><strong>Message:</strong></p>
                 <p>${message}</p>
             `,
@@ -310,8 +330,13 @@ app.get('/api/email/settings', async (req, res) => {
 app.post('/api/email/settings/verify', async (req, res) => {
     const { appPassword, senderEmail } = req.body;
     try {
+        const host = process.env.EMAIL_SMTP_HOST || 'smtp.gmail.com';
+        const port = Number(process.env.EMAIL_SMTP_PORT || 465);
+
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host,
+            port,
+            secure: port === 465,
             auth: { user: senderEmail, pass: appPassword },
         });
         await transporter.verify();
