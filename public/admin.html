@@ -61,7 +61,7 @@
     <div class="admin-container">
       <div class="admin-container1" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
         <h1 class="admin-text section-title">Admin Panel</h1>
-        <a href="/api/auth/logout" class="btn btn-secondary">Logout</a>
+        <button id="logout-button" class="btn btn-secondary">Logout</button>
       </div>
 
       <div class="admin-forms-container">
@@ -430,6 +430,71 @@
             statusDiv.style.color = 'red';
             console.error('Error saving email settings:', error);
           });
+        });
+      });
+    </script>
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        const navigationToggle = document.querySelector('.navigation-toggle');
+        const navigationMenu = document.getElementById('navigation-menu');
+        const body = document.body;
+
+        if (!navigationToggle || !navigationMenu) {
+          return;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'navigation-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        body.appendChild(overlay);
+
+        function toggleMobileMenu() {
+          const isOpen = navigationToggle.classList.contains('navigation-toggle-active');
+          if (isOpen) {
+            closeMobileMenu();
+          } else {
+            openMobileMenu();
+          }
+        }
+
+        function openMobileMenu() {
+          navigationToggle.classList.add('navigation-toggle-active');
+          navigationToggle.setAttribute('aria-expanded', 'true');
+          navigationMenu.classList.add('navigation-menu-open');
+          overlay.classList.add('navigation-overlay-active');
+          body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+          navigationToggle.classList.remove('navigation-toggle-active');
+          navigationToggle.setAttribute('aria-expanded', 'false');
+          navigationMenu.classList.remove('navigation-menu-open');
+          overlay.classList.remove('navigation-overlay-active');
+          body.style.overflow = '';
+        }
+
+        navigationToggle.addEventListener('click', toggleMobileMenu);
+        overlay.addEventListener('click', closeMobileMenu);
+
+        const navigationLinks = document.querySelectorAll('.navigation-link');
+        navigationLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            if (window.innerWidth <= 991) {
+              closeMobileMenu();
+            }
+          });
+        });
+
+        document.addEventListener('keydown', e => {
+          if (e.key === 'Escape' && navigationToggle.classList.contains('navigation-toggle-active')) {
+            closeMobileMenu();
+          }
+        });
+
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 991) {
+            closeMobileMenu();
+          }
         });
       });
     </script>

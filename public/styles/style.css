@@ -1774,13 +1774,24 @@
 }
  
 .video-wrapper {
-  overflow: hidden;
   position: relative;
-  background: #000000;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 177.77%; /* 9:16 Aspect Ratio for vertical videos */
+  background: #000;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
-  transition: all 0.6s var(--animation-curve-primary);
-  aspect-ratio: 4 / 5;
   border-radius: var(--border-radius-sm);
+}
+
+.video-wrapper iframe,
+.video-wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
 }
 
 .video-hole-overlay {
@@ -2122,10 +2133,9 @@
 .video-wrapper video {
   width: 100%;
   height: 100%;
-  aspect-ratio: 16 / 9;
   object-fit: cover;
   border: none;
-  border-radius: 8px; /* Match placeholder style */
+  border-radius: 8px;
 }
 
 .video-placeholder {
@@ -2388,9 +2398,10 @@
   .video-grid {
     gap: var(--spacing-2xl);
     grid-template-columns: 1fr;
+    display: block; /* Stack videos vertically on mobile */
   }
   .video-wrapper {
-    aspect-ratio: 16 / 9;
+    /* No change needed, will inherit the 16:9 ratio */
   }
   .play-button {
     width: 4rem;

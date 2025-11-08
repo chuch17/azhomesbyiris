@@ -3,6 +3,72 @@
   function logInfo(msg, meta) { try { console.log(`${LOG_PREFIX} ${msg}`, meta || '') } catch (_) { } }
   function logError(msg, err) { try { console.error(`${LOG_PREFIX} ERROR: ${msg}`, err) } catch (_) { } }
 
+  function startVideoTimer(container, duration, videoId) {
+    if (!container) return; // Guard against missing container
+
+    const existingTimerId = container.dataset?.videoTimerId;
+    if (existingTimerId) {
+      clearTimeout(existingTimerId);
+    }
+
+    if (!duration || isNaN(duration) || duration <= 0) {
+      logInfo(`[videoTimer] No valid duration for video_${videoId}. Timer not started.`);
+      return;
+    }
+    logInfo(`[videoTimer] Timer started for video_${videoId}: ${duration}s`);
+
+    const timerId = setTimeout(() => {
+      const containerEl = document.getElementById(`video-${videoId}-container`);
+      if (containerEl) {
+        logInfo(`[videoTimer] Timer ended for video_${videoId} - overlay reset.`);
+      }
+    }, duration * 1000);
+
+    if (container.dataset) {
+      container.dataset.videoTimerId = timerId;
+    }
+  }
+
+  const overlayRegistry = new Map();
+  const durationRegistry = new Map();
+  const containerRegistry = new Map();
+  let overlayPollerId = null;
+
+  function ensureOverlayPoller() {
+    if (overlayPollerId !== null) return;
+
+    overlayPollerId = window.setInterval(() => {
+      const active = document.activeElement;
+      if (!active || active.tagName !== 'IFRAME') return;
+
+      const videoId = active.dataset ? active.dataset.videoId : undefined;
+      if (!videoId) return;
+
+      const overlay = overlayRegistry.get(videoId);
+      if (!overlay || overlay.classList.contains('hidden')) return;
+
+      logInfo(`[overlay] Active iframe detected for video ${videoId}. Hiding overlay.`);
+      overlay.classList.add('hidden');
+
+      const container = containerRegistry.get(videoId);
+      const storedDuration = durationRegistry.get(videoId);
+      const numericId = Number(videoId);
+
+      if (container) {
+        startVideoTimer(container, Number(storedDuration), numericId);
+      }
+
+      const durationValue = Number(storedDuration);
+      if (!Number.isNaN(durationValue) && durationValue > 0) {
+        localStorage.setItem('video-play-start-event', JSON.stringify({
+          videoId: numericId,
+          duration: durationValue,
+          timestamp: Date.now()
+        }));
+      }
+    }, 120);
+  }
+
   function onReady(fn) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', fn);
@@ -221,6 +287,10 @@
     }
 
     function renderVideos(data) {
+      overlayRegistry.clear();
+      durationRegistry.clear();
+      containerRegistry.clear();
+
       const videos = [
         { el: v1, data: data.v1, id: 1 },
         { el: v2, data: data.v2, id: 2 },
@@ -252,33 +322,20 @@
           logInfo('[overlay] vignette applied');
           logInfo('[overlay] glow intensified');
           
-          const duration = parseInt(v.data.duration, 10);
+          const configDuration = parseInt(v.data.duration, 10);
+          const storedDuration = localStorage.getItem(`videoDuration_${v.id}`);
+          const effectiveDuration = Number.isNaN(configDuration) || configDuration <= 0
+            ? parseInt(storedDuration, 10)
+            : configDuration;
 
-          // The logic to hide the overlay on click is now direct
-          const focusCheck = () => {
-            // Use a timeout to ensure activeElement is updated correctly across browsers
-            setTimeout(() => {
-              const iframe = v.el.container.querySelector('iframe');
-              if (document.activeElement === iframe) {
-                // 1. Hide the overlay immediately
-                overlay.classList.add('hidden');
-                
-                // 2. Start the timer for this video
-                startVideoTimer(v.el.container, duration, v.id);
-                
-                // 3. Fire the event to notify the admin page
-                localStorage.setItem('video-play-start-event', JSON.stringify({
-                  videoId: v.id,
-                  duration: duration,
-                  timestamp: Date.now()
-                }));
-                
-                // 4. Clean up the listener
-                window.removeEventListener('blur', focusCheck);
-              }
-            }, 0);
-          };
-          window.addEventListener('blur', focusCheck, true);
+          overlayRegistry.set(String(v.id), overlay);
+          durationRegistry.set(String(v.id), effectiveDuration);
+          containerRegistry.set(String(v.id), v.el.container);
+
+          const iframe = v.el.container.querySelector('iframe');
+          if (iframe) {
+            iframe.dataset.videoId = String(v.id);
+          }
         } else {
           // No URL, so ensure the placeholder is shown
           v.el.container.innerHTML = `
@@ -293,26 +350,40 @@
         // This is no longer needed on the homepage as the logic is in video_embed.html
         // setupYouTubePlayers(youtubePlayersToCreate);
       }
+
+      ensureOverlayPoller();
     }
 
-    function startVideoTimer(container, duration, videoId) {
-      if (!duration || isNaN(duration) || duration <= 0) {
-        logInfo(`[videoTimer] No valid duration for video_${videoId}. Timer not started.`);
-        return;
-      }
-      logInfo(`[videoTimer] Timer started for video_${videoId}: ${duration}s`);
-      
-      const timerId = setTimeout(() => {
+    // This listener is no longer needed with the new direct-click approach
+    /*
+    window.addEventListener('message', function(event) {
+      // Basic security: check if the message is what we expect
+      if (event.data && event.data.type === 'video-gallery-interaction') {
+        const videoId = event.data.videoId;
+        logInfo(`[overlay] Interaction detected from video ${videoId}. Hiding overlay.`);
+        
         const container = document.getElementById(`video-${videoId}-container`);
         if (container) {
-          // resetVideo(container); // This function is no longer needed
-          logInfo(`[videoTimer] Timer ended for video_${videoId} - overlay reset.`);
+          const overlay = container.querySelector('.video-hole-overlay');
+          if (overlay) {
+            overlay.classList.add('hidden');
+          }
+          
+          // We need to fetch the duration again or store it on the element
+          // For simplicity, let's fetch it from localStorage as the admin page does
+          const duration = localStorage.getItem(`videoDuration_${videoId}`);
+          startVideoTimer(container, parseInt(duration, 10), videoId);
+          
+          // Fire the event to notify the admin page
+          localStorage.setItem('video-play-start-event', JSON.stringify({
+            videoId: videoId,
+            duration: parseInt(duration, 10),
+            timestamp: Date.now()
+          }));
         }
-      }, duration * 1000);
-      
-      // Store the timer ID on the container so it could be cleared if needed
-      container.dataset.videoTimerId = timerId;
-    }
+      }
+    });
+    */
 
     // This function is no longer needed on the homepage
     /*

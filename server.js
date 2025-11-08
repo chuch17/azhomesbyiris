@@ -327,6 +327,16 @@ app.post('/api/email/settings/verify', async (req, res) => {
     }
 });
 
+// Serve favicon to prevent 404s during development/production
+const faviconPath = path.join(__dirname, 'public', 'uploads', 'hero', 'hero-logo.png');
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(faviconPath, err => {
+        if (err) {
+            res.status(404).end();
+        }
+    });
+});
+
 // Serve static assets after API routes are registered
 app.use(express.static(path.join(__dirname, 'public')));
 

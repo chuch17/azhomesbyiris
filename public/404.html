@@ -65,11 +65,76 @@
 
       <div class="not-found-container1">
         <h3>OOPS! PAGE NOT FOUND</h3>
-        <div class="not-found-container2">
-          <h1 class="not-found-text1">404</h1>
-        </div>
-        <h2 class="not-found-text2">We can't seem to find the page you're looking for.</h2>
+        <h1 class="not-found-text1">404</h1>
+        <p class="not-found-text2">
+          WE ARE SORRY, BUT THE PAGE YOU REQUESTED WAS NOT FOUND
+        </p>
       </div>
     </div>
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        const navigationToggle = document.querySelector('.navigation-toggle');
+        const navigationMenu = document.getElementById('navigation-menu');
+        const body = document.body;
+
+        if (!navigationToggle || !navigationMenu) {
+          return;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'navigation-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        body.appendChild(overlay);
+
+        function toggleMobileMenu() {
+          const isOpen = navigationToggle.classList.contains('navigation-toggle-active');
+          if (isOpen) {
+            closeMobileMenu();
+          } else {
+            openMobileMenu();
+          }
+        }
+
+        function openMobileMenu() {
+          navigationToggle.classList.add('navigation-toggle-active');
+          navigationToggle.setAttribute('aria-expanded', 'true');
+          navigationMenu.classList.add('navigation-menu-open');
+          overlay.classList.add('navigation-overlay-active');
+          body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+          navigationToggle.classList.remove('navigation-toggle-active');
+          navigationToggle.setAttribute('aria-expanded', 'false');
+          navigationMenu.classList.remove('navigation-menu-open');
+          overlay.classList.remove('navigation-overlay-active');
+          body.style.overflow = '';
+        }
+
+        navigationToggle.addEventListener('click', toggleMobileMenu);
+        overlay.addEventListener('click', closeMobileMenu);
+
+        const navigationLinks = document.querySelectorAll('.navigation-link');
+        navigationLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            if (window.innerWidth <= 991) {
+              closeMobileMenu();
+            }
+          });
+        });
+
+        document.addEventListener('keydown', e => {
+          if (e.key === 'Escape' && navigationToggle.classList.contains('navigation-toggle-active')) {
+            closeMobileMenu();
+          }
+        });
+
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 991) {
+            closeMobileMenu();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
