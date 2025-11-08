@@ -29,46 +29,6 @@
     }
   }
 
-  const overlayRegistry = new Map();
-  const durationRegistry = new Map();
-  const containerRegistry = new Map();
-  let overlayPollerId = null;
-
-  function ensureOverlayPoller() {
-    if (overlayPollerId !== null) return;
-
-    overlayPollerId = window.setInterval(() => {
-      const active = document.activeElement;
-      if (!active || active.tagName !== 'IFRAME') return;
-
-      const videoId = active.dataset ? active.dataset.videoId : undefined;
-      if (!videoId) return;
-
-      const overlay = overlayRegistry.get(videoId);
-      if (!overlay || overlay.classList.contains('hidden')) return;
-
-      logInfo(`[overlay] Active iframe detected for video ${videoId}. Hiding overlay.`);
-      overlay.classList.add('hidden');
-
-      const container = containerRegistry.get(videoId);
-      const storedDuration = durationRegistry.get(videoId);
-      const numericId = Number(videoId);
-
-      if (container) {
-        startVideoTimer(container, Number(storedDuration), numericId);
-      }
-
-      const durationValue = Number(storedDuration);
-      if (!Number.isNaN(durationValue) && durationValue > 0) {
-        localStorage.setItem('video-play-start-event', JSON.stringify({
-          videoId: numericId,
-          duration: durationValue,
-          timestamp: Date.now()
-        }));
-      }
-    }, 120);
-  }
-
   function onReady(fn) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', fn);
@@ -287,9 +247,9 @@
     }
 
     function renderVideos(data) {
-      overlayRegistry.clear();
-      durationRegistry.clear();
-      containerRegistry.clear();
+      // overlayRegistry.clear(); // Removed as per new logic
+      // durationRegistry.clear(); // Removed as per new logic
+      // containerRegistry.clear(); // Removed as per new logic
 
       const videos = [
         { el: v1, data: data.v1, id: 1 },
@@ -328,14 +288,33 @@
             ? parseInt(storedDuration, 10)
             : configDuration;
 
-          overlayRegistry.set(String(v.id), overlay);
-          durationRegistry.set(String(v.id), effectiveDuration);
-          containerRegistry.set(String(v.id), v.el.container);
-
+          // NEW LOGIC: Direct click/touch listener for universal compatibility
           const iframe = v.el.container.querySelector('iframe');
-          if (iframe) {
-            iframe.dataset.videoId = String(v.id);
-          }
+
+          const playVideo = () => {
+            overlay.classList.add('hidden');
+            
+            if (iframe) {
+              // Re-setting the src is a reliable way to trigger autoplay after a user gesture
+              iframe.src = iframe.src;
+            }
+
+            startVideoTimer(v.el.container, effectiveDuration, v.id);
+
+            localStorage.setItem('video-play-start-event', JSON.stringify({
+              videoId: v.id,
+              duration: effectiveDuration,
+              timestamp: Date.now()
+            }));
+
+            // Clean up to prevent multiple triggers
+            overlay.removeEventListener('click', playVideo);
+            overlay.removeEventListener('touchstart', playVideo);
+          };
+
+          overlay.addEventListener('click', playVideo);
+          overlay.addEventListener('touchstart', playVideo);
+
         } else {
           // No URL, so ensure the placeholder is shown
           v.el.container.innerHTML = `
@@ -351,7 +330,7 @@
         // setupYouTubePlayers(youtubePlayersToCreate);
       }
 
-      ensureOverlayPoller();
+      // Removed ensureOverlayPoller();
     }
 
     // This listener is no longer needed with the new direct-click approach

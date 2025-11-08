@@ -1824,8 +1824,8 @@
   justify-content: center;
   align-items: center;
   
-  /* This is the key: makes the entire overlay a "ghost" to all mouse events */
-  pointer-events: none; 
+  /* This is the key: makes the entire overlay clickable */
+  cursor: pointer; 
   
   /* Fade-in animation */
   opacity: 0;
