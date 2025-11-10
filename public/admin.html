@@ -206,21 +206,20 @@
           <h2 class="section-title">E-Mail Settings</h2>
           <form class="thq-card" id="email-settings-form">
             <div class="form-group">
-              <label for="contact-form-3-app-password" class="form-label">App Password</label>
-              <input type="password" id="contact-form-3-app-password" required="true" placeholder="App Password" class="form-input" />
-                    </div>
-            <div class="form-group">
               <label for="contact-form-3-sender-email" class="form-label">Sender Email</label>
-              <input type="email" id="contact-form-3-sender-email" required="true" placeholder="Sender Email" class="form-input" />
-                  </div>
+              <input type="email" id="contact-form-3-sender-email" required="true" placeholder="Sender Email" class="form-input" readonly />
+              <p style="font-size: 0.8rem; color: #666; margin-top: 4px;">
+                * Sender email is locked. To change this, update the EMAIL_SENDER and EMAIL_APP_PASSWORD environment variables in Render.
+              </p>
+            </div>
             <div class="form-group">
               <label for="contact-form-3-recipient-email" class="form-label">Recipient Email</label>
               <input type="email" id="contact-form-3-recipient-email" required="true" placeholder="Recipient Email" class="form-input" />
-                    </div>
+            </div>
             <button type="submit" class="btn btn-primary">Save Settings</button>
             <div id="email-settings-status" style="margin-top: 1rem;"></div>
-                </form>
-                    </div>
+          </form>
+        </div>
 
         <div id="ContactForm12" class="admin-form-section">
           <h2 class="section-title">Video Gallery Settings</h2>
@@ -375,7 +374,6 @@
         const emailSettingsForm = document.getElementById('email-settings-form');
         const statusDiv = document.getElementById('email-settings-status');
         
-        const appPasswordInput = document.getElementById('contact-form-3-app-password');
         const senderEmailInput = document.getElementById('contact-form-3-sender-email');
         const recipientEmailInput = document.getElementById('contact-form-3-recipient-email');
 
@@ -384,44 +382,35 @@
           .then(response => response.json())
           .then(data => {
             if (data) {
-              senderEmailInput.value = data.senderEmail || '';
+              senderEmailInput.value = data.senderEmail || 'Not set in environment variables';
               recipientEmailInput.value = data.recipientEmail || '';
-              if (data.hasPassword) {
-                appPasswordInput.placeholder = '******** (leave blank to keep current)';
-              }
             }
           })
           .catch(error => console.error('Error fetching email settings:', error));
 
         emailSettingsForm.addEventListener('submit', function (e) {
           e.preventDefault();
-          statusDiv.textContent = 'Verifying and saving...';
+          statusDiv.textContent = 'Saving...';
           statusDiv.style.color = 'inherit';
 
-          const appPassword = appPasswordInput.value;
-          const senderEmail = senderEmailInput.value;
           const recipientEmail = recipientEmailInput.value;
           
-          fetch('/api/email/settings/verify', {
+          fetch('/api/email/settings', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              appPassword,
-              senderEmail,
               recipientEmail,
             }),
           })
           .then(response => response.json())
           .then(data => {
             if (data.success) {
-              statusDiv.textContent = '✅ Verified and saved successfully';
+              statusDiv.textContent = '✅ Recipient email saved successfully';
               statusDiv.style.color = 'green';
-              appPasswordInput.value = '';
-              appPasswordInput.placeholder = '******** (leave blank to keep current)';
             } else {
-              statusDiv.textContent = `❌ Failed to verify credentials. Please check your Gmail App Password and try again.`;
+              statusDiv.textContent = `❌ Failed to save: ${data.error}`;
               statusDiv.style.color = 'red';
             }
           })

@@ -245,10 +245,12 @@ const nodemailer = require('nodemailer');
 
 async function resolveEmailSettings() {
     const fileConfig = await readConfig('emailSettings');
+    // Sender and password now come exclusively from environment variables.
+    // Recipient comes exclusively from the config file.
     return {
-        senderEmail: process.env.EMAIL_SENDER || fileConfig.senderEmail || '',
-        appPassword: process.env.EMAIL_APP_PASSWORD || fileConfig.appPassword || '',
-        recipientEmail: process.env.EMAIL_RECIPIENT || fileConfig.recipientEmail || '',
+        senderEmail: process.env.EMAIL_SENDER || '',
+        appPassword: process.env.EMAIL_APP_PASSWORD || '',
+        recipientEmail: fileConfig.recipientEmail || '',
         host: process.env.EMAIL_SMTP_HOST || 'smtp.gmail.com',
         port: Number(process.env.EMAIL_SMTP_PORT || 465),
     };
@@ -317,16 +319,43 @@ app.post('/api/email/contact', async (req, res) => {
 app.get('/api/email/settings', async (req, res) => {
     try {
         const config = await readConfig('emailSettings');
+        const senderFromEnv = process.env.EMAIL_SENDER || '';
+        
         res.json({
-            senderEmail: config.senderEmail,
+            // Always show the sender from the environment variable.
+            senderEmail: senderFromEnv,
+            // Recipient is the only value from the file.
             recipientEmail: config.recipientEmail,
-            hasPassword: !!config.appPassword
+            // This is no longer needed but helps the admin panel know if credentials are set.
+            hasPassword: !!(process.env.EMAIL_APP_PASSWORD)
         });
     } catch (error) {
         res.status(500).json({ error: 'Failed to read email settings.' });
     }
 });
 
+// This new endpoint handles saving ONLY the recipient email.
+app.post('/api/email/settings', async (req, res) => {
+    try {
+        const { recipientEmail } = req.body;
+        if (!recipientEmail) {
+            return res.status(400).json({ error: 'Recipient email is required.' });
+        }
+        
+        // Read the existing config to not overwrite other settings (if any).
+        const currentConfig = await readConfig('emailSettings');
+        currentConfig.recipientEmail = recipientEmail;
+        
+        await writeConfig('emailSettings', currentConfig);
+        res.json({ success: true, message: 'Recipient email updated successfully.' });
+    } catch (error) {
+        console.error('Error saving recipient email:', error);
+        res.status(500).json({ error: 'Failed to save settings.' });
+    }
+});
+
+// The verification endpoint is now removed as password is no longer managed by the app.
+/*
 app.post('/api/email/settings/verify', async (req, res) => {
     const { appPassword, senderEmail } = req.body;
     try {
@@ -351,6 +380,7 @@ app.post('/api/email/settings/verify', async (req, res) => {
         res.status(400).json({ error: 'Verification failed. Please check credentials.' });
     }
 });
+*/
 
 // Serve favicon to prevent 404s during development/production
 const faviconPath = path.join(__dirname, 'public', 'uploads', 'hero', 'hero-logo.png');
