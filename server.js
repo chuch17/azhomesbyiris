@@ -252,7 +252,7 @@ async function resolveEmailSettings() {
         appPassword: process.env.EMAIL_APP_PASSWORD || '',
         recipientEmail: fileConfig.recipientEmail || '',
         host: process.env.EMAIL_SMTP_HOST || 'smtp.gmail.com',
-        port: Number(process.env.EMAIL_SMTP_PORT || 465),
+        port: Number(process.env.EMAIL_SMTP_PORT || 587),
     };
 }
 
@@ -292,6 +292,8 @@ app.post('/api/email/contact', async (req, res) => {
 
         const { transporter, emailConfig } = mailContext;
         const safeInterests = Array.isArray(interests) ? interests : [];
+
+        console.log('[email] Sending via host:', emailConfig.host, 'port:', emailConfig.port, 'secure:', emailConfig.port === 465);
 
         await transporter.sendMail({
             from: `"${name}" <${emailConfig.senderEmail}>`,
