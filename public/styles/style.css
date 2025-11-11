@@ -2496,3 +2496,32 @@
   visibility: hidden;
   pointer-events: none; /* Prevent clicks when hidden */
 }
+
+.video-wrapper::after {
+  content: '\25B6';
+  position: absolute;
+  bottom: clamp(200px, 28vw, 260px);
+  right: clamp(12px, 2vw, 20px);
+  transform: translate(50%, 50%);
+  font-size: clamp(20px, 4vw, 32px);
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 50%;
+  width: clamp(36px, 5vw, 48px);
+  height: clamp(36px, 5vw, 48px);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0.95;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.video-wrapper:hover::after {
+  opacity: 0.4;
+}
+
+.video-wrapper.playing::after,
+.video-wrapper:focus-within::after {
+  opacity: 0;
+  transform: translate(50%, 50%) scale(0.8);
+}

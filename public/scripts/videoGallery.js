@@ -3,30 +3,17 @@
   function logInfo(msg, meta) { try { console.log(`${LOG_PREFIX} ${msg}`, meta || '') } catch (_) { } }
   function logError(msg, err) { try { console.error(`${LOG_PREFIX} ERROR: ${msg}`, err) } catch (_) { } }
 
-  function startVideoTimer(container, duration, videoId) {
-    if (!container) return; // Guard against missing container
-
-    const existingTimerId = container.dataset?.videoTimerId;
-    if (existingTimerId) {
-      clearTimeout(existingTimerId);
-    }
-
-    if (!duration || isNaN(duration) || duration <= 0) {
-      logInfo(`[videoTimer] No valid duration for video_${videoId}. Timer not started.`);
-      return;
-    }
-    logInfo(`[videoTimer] Timer started for video_${videoId}: ${duration}s`);
-
-    const timerId = setTimeout(() => {
-      const containerEl = document.getElementById(`video-${videoId}-container`);
-      if (containerEl) {
-        logInfo(`[videoTimer] Timer ended for video_${videoId} - overlay reset.`);
+  if (!window.__azVideoGalleryPlayListener) {
+    window.addEventListener('message', function(event) {
+      if (!event || !event.data || event.data.type !== 'video-gallery-playing') return;
+      const videoId = event.data.id;
+      if (!videoId) return;
+      const container = document.getElementById(`video-${videoId}-container`);
+      if (container) {
+        container.classList.add('playing');
       }
-    }, duration * 1000);
-
-    if (container.dataset) {
-      container.dataset.videoTimerId = timerId;
-    }
+    });
+    window.__azVideoGalleryPlayListener = true;
   }
 
   function onReady(fn) {
@@ -266,55 +253,12 @@
           const embed = createVideoEmbed(v.data.url, v.id);
           
           v.el.container.innerHTML = embed.html;
+          v.el.container.classList.remove('playing');
 
-          // Inject the hole overlay and the non-interactive play symbol
-          const overlay = document.createElement('div');
-          overlay.className = 'video-hole-overlay';
-          overlay.innerHTML = `
-            <div class="overlay-play-symbol">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M7,5.5L7,18.5C7,19.9,8.4,20.8,9.7,20L20.2,13.5C21.4,12.7,21.4,11.2,20.2,10.4L9.7,3.9C8.4,3.1,7,4,7,5.5Z"/>
-              </svg>
-            </div>
-          `;
-          v.el.container.appendChild(overlay);
-          
-          logInfo('[overlay] vignette applied');
-          logInfo('[overlay] glow intensified');
-          
-          const configDuration = parseInt(v.data.duration, 10);
-          const storedDuration = localStorage.getItem(`videoDuration_${v.id}`);
-          const effectiveDuration = Number.isNaN(configDuration) || configDuration <= 0
-            ? parseInt(storedDuration, 10)
-            : configDuration;
-
-          // NEW LOGIC: Direct click/touch listener for universal compatibility
-          const iframe = v.el.container.querySelector('iframe');
-
-          const playVideo = () => {
-            overlay.classList.add('hidden');
-            
-            if (iframe) {
-              // Re-setting the src is a reliable way to trigger autoplay after a user gesture
-              iframe.src = iframe.src;
-            }
-
-            startVideoTimer(v.el.container, effectiveDuration, v.id);
-
-            localStorage.setItem('video-play-start-event', JSON.stringify({
-              videoId: v.id,
-              duration: effectiveDuration,
-              timestamp: Date.now()
-            }));
-
-            // Clean up to prevent multiple triggers
-            overlay.removeEventListener('click', playVideo);
-            overlay.removeEventListener('touchstart', playVideo);
+          const markPlaying = () => {
+            v.el.container.classList.add('playing');
           };
-
-          overlay.addEventListener('click', playVideo);
-          overlay.addEventListener('touchstart', playVideo);
-
+          v.el.container.addEventListener('pointerdown', markPlaying, { once: true, capture: true });
         } else {
           // No URL, so ensure the placeholder is shown
           v.el.container.innerHTML = `
@@ -322,6 +266,7 @@
               <p>Video ${v.id}</p>
               <span>Awaiting content from Admin Panel</span>
             </div>`;
+          v.el.container.classList.remove('playing');
         }
       });
 
@@ -362,6 +307,36 @@
         }
       }
     });
+    */
+
+    // This function is no longer needed on the homepage
+    /*
+    function startVideoTimer(container, duration, videoId) {
+      if (!container) return; // Guard against missing container
+      
+      // Clear any existing timer for this video, in case of rapid re-clicks
+      const existingTimerId = container.dataset.videoTimerId;
+      if (existingTimerId) {
+        clearTimeout(existingTimerId);
+      }
+
+      if (!duration || isNaN(duration) || duration <= 0) {
+        logInfo(`[videoTimer] No valid duration for video_${videoId}. Timer not started.`);
+        return;
+      }
+      logInfo(`[videoTimer] Timer started for video_${videoId}: ${duration}s`);
+      
+      const timerId = setTimeout(() => {
+        const container = document.getElementById(`video-${videoId}-container`);
+        if (container) {
+          // resetVideo(container); // This function is no longer needed
+          logInfo(`[videoTimer] Timer ended for video_${videoId} - overlay reset.`);
+        }
+      }, duration * 1000);
+      
+      // Store the timer ID on the container so it could be cleared if needed
+      container.dataset.videoTimerId = timerId;
+    }
     */
 
     // This function is no longer needed on the homepage

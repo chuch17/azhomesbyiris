@@ -118,6 +118,7 @@
 
         var mount = document.getElementById('mount');
         var url = getParam('url');
+        var videoId = getParam('id');
 
         if (!url) {
           mount.innerHTML = '<div class="fallback">No video URL provided.</div>';
@@ -156,13 +157,24 @@
           return;
         }
 
+        var directVideo = null;
+
         if (/(\.mp4|\.webm|\.mov)(\?|#|$)/i.test(lower)) {
-          mount.appendChild(createDirectVideo(url));
-          return;
+          directVideo = createDirectVideo(url);
+          if (directVideo) {
+            directVideo.addEventListener('play', function(){
+              try {
+                window.parent.postMessage({ type: 'video-gallery-playing', id: videoId }, '*');
+              } catch (_) {}
+            });
+          }
+          mount.appendChild(directVideo);
+        } else {
+          // Fallback
+          mount.innerHTML = '<div class="fallback">Unsupported video source. <a target="_blank" rel="noopener" href="' + url + '">Open original</a></div>';
         }
 
-        // Fallback
-        mount.innerHTML = '<div class="fallback">Unsupported video source. <a target="_blank" rel="noopener" href="' + url + '">Open original</a></div>';
+        return;
       })();
     </script>
   </body>
