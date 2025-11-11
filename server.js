@@ -249,6 +249,7 @@ async function resolveEmailSettings() {
     // Recipient comes exclusively from the config file.
     return {
         senderEmail: process.env.EMAIL_SENDER || '',
+        smtpUser: process.env.EMAIL_SMTP_USER || process.env.EMAIL_SENDER || '',
         appPassword: process.env.EMAIL_APP_PASSWORD || '',
         recipientEmail: fileConfig.recipientEmail || '',
         host: process.env.EMAIL_SMTP_HOST || 'smtp.gmail.com',
@@ -270,7 +271,7 @@ async function createTransporter() {
             port: emailConfig.port,
             secure: emailConfig.port === 465,
             auth: {
-                user: emailConfig.senderEmail,
+                user: emailConfig.smtpUser,
                 pass: emailConfig.appPassword,
             },
         });
@@ -293,7 +294,7 @@ app.post('/api/email/contact', async (req, res) => {
         const { transporter, emailConfig } = mailContext;
         const safeInterests = Array.isArray(interests) ? interests : [];
 
-        console.log('[email] Sending via host:', emailConfig.host, 'port:', emailConfig.port, 'secure:', emailConfig.port === 465);
+        console.log('[email] Sending via host:', emailConfig.host, 'port:', emailConfig.port, 'secure:', emailConfig.port === 465, 'user:', emailConfig.smtpUser ? '[provided]' : '[sender fallback]');
 
         await transporter.sendMail({
             from: `"${name}" <${emailConfig.senderEmail}>`,
