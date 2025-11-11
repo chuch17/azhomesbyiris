@@ -241,76 +241,101 @@ app.get('/api/auth/logout', (req, res) => {
 });
 
 // -- Nodemailer Endpoints --
-const nodemailer = require('nodemailer');
-
 async function resolveEmailSettings() {
     const fileConfig = await readConfig('emailSettings');
-    // Sender and password now come exclusively from environment variables.
-    // Recipient comes exclusively from the config file.
+    // Sender and credentials now come exclusively from environment variables.
+    // Recipient comes exclusively from the config file (managed via admin panel).
     return {
         senderEmail: process.env.EMAIL_SENDER || '',
-        smtpUser: process.env.EMAIL_SMTP_USER || process.env.EMAIL_SENDER || '',
-        appPassword: process.env.EMAIL_APP_PASSWORD || '',
+        apiKey: process.env.EMAIL_SMTP_USER || '',
+        apiSecret: process.env.EMAIL_APP_PASSWORD || '',
         recipientEmail: fileConfig.recipientEmail || '',
-        host: process.env.EMAIL_SMTP_HOST || 'smtp.gmail.com',
-        port: Number(process.env.EMAIL_SMTP_PORT || 587),
     };
 }
 
-async function createTransporter() {
-    try {
-        const emailConfig = await resolveEmailSettings();
+async function sendMailjetEmail({ senderEmail, apiKey, apiSecret, recipientEmail, subject, htmlBody, textBody, replyTo }) {
+    if (!senderEmail || !apiKey || !apiSecret || !recipientEmail) {
+        console.error('Email settings are incomplete. senderEmail/apiKey/apiSecret/recipientEmail are required.');
+        return { success: false, error: 'Email service is not configured.' };
+    }
 
-        if (!emailConfig.senderEmail || !emailConfig.appPassword || !emailConfig.recipientEmail) {
-            console.error('Email settings are incomplete. senderEmail/appPassword/recipientEmail are required.');
-            return null;
-        }
+    const authHeader = Buffer.from(`${apiKey}:${apiSecret}`).toString('base64');
 
-        const transporter = nodemailer.createTransport({
-            host: emailConfig.host,
-            port: emailConfig.port,
-            secure: emailConfig.port === 465,
-            auth: {
-                user: emailConfig.smtpUser,
-                pass: emailConfig.appPassword,
+    const payload = {
+        Messages: [
+            {
+                From: { Email: senderEmail, Name: 'AZ Homes by Iris' },
+                To: [{ Email: recipientEmail }],
+                Subject: subject,
+                TextPart: textBody,
+                HTMLPart: htmlBody,
+                ReplyTo: replyTo ? { Email: replyTo } : undefined,
             },
+        ],
+    };
+
+    try {
+        const response = await fetch('https://api.mailjet.com/v3.1/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Basic ${authHeader}`,
+            },
+            body: JSON.stringify(payload),
         });
 
-        return { transporter, emailConfig };
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            console.error('[email] Mailjet response error', { status: response.status, body: data });
+            return { success: false, error: `Mailjet responded with status ${response.status}` };
+        }
+
+        const messageStatus = data?.Messages?.[0]?.Status;
+        if (messageStatus !== 'success') {
+            console.error('[email] Mailjet send failure', data);
+            return { success: false, error: 'Mailjet failed to send the message.' };
+        }
+
+        return { success: true };
     } catch (error) {
-        console.error('Failed to create Nodemailer transporter:', error);
-        return null;
+        console.error('[email] Mailjet fetch error', error);
+        return { success: false, error: 'Failed to reach Mailjet API.' };
     }
 }
 
 app.post('/api/email/contact', async (req, res) => {
     try {
         const { name, email, phone, message, interests } = req.body;
-        const mailContext = await createTransporter();
-        if (!mailContext) {
-            return res.status(500).json({ error: 'Email service is not configured.' });
-        }
-
-        const { transporter, emailConfig } = mailContext;
+        const emailConfig = await resolveEmailSettings();
         const safeInterests = Array.isArray(interests) ? interests : [];
 
-        console.log('[email] Sending via host:', emailConfig.host, 'port:', emailConfig.port, 'secure:', emailConfig.port === 465, 'user:', emailConfig.smtpUser ? '[provided]' : '[sender fallback]');
+        const subject = 'New Contact Form Submission from AZHomesbyIris';
+        const htmlBody = `
+            <h3>New Contact Form Submission</h3>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+            <p><strong>Interests:</strong> ${safeInterests.length ? safeInterests.join(', ') : 'None specified'}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message}</p>
+        `;
+        const textBody = `New Contact Form Submission\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nInterests: ${safeInterests.length ? safeInterests.join(', ') : 'None specified'}\n\nMessage:\n${message}`;
 
-        await transporter.sendMail({
-            from: `"${name}" <${emailConfig.senderEmail}>`,
-            to: emailConfig.recipientEmail,
+        const sendResult = await sendMailjetEmail({
+            senderEmail: emailConfig.senderEmail,
+            apiKey: emailConfig.apiKey,
+            apiSecret: emailConfig.apiSecret,
+            recipientEmail: emailConfig.recipientEmail,
+            subject,
+            htmlBody,
+            textBody,
             replyTo: email,
-            subject: 'New Contact Form Submission from AZHomesbyIris',
-            html: `
-                <h3>New Contact Form Submission</h3>
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
-                <p><strong>Interests:</strong> ${safeInterests.length ? safeInterests.join(', ') : 'None specified'}</p>
-                <p><strong>Message:</strong></p>
-                <p>${message}</p>
-            `,
         });
+
+        if (!sendResult.success) {
+            return res.status(500).json({ error: sendResult.error });
+        }
 
         res.json({ success: true });
     } catch (error) {
@@ -329,7 +354,7 @@ app.get('/api/email/settings', async (req, res) => {
             senderEmail: senderFromEnv,
             // Recipient is the only value from the file.
             recipientEmail: config.recipientEmail,
-            // This is no longer needed but helps the admin panel know if credentials are set.
+            // Indicates whether API credentials are present.
             hasPassword: !!(process.env.EMAIL_APP_PASSWORD)
         });
     } catch (error) {
