@@ -173,12 +173,15 @@
                 navigationLinks.forEach((link) => {
                   link.addEventListener('click', (e) => {
                     const href = link.getAttribute('href')
+                    if (!href) {
+                      return
+                    }
                     if (href.startsWith('#')) {
                       e.preventDefault()
                       const target = document.querySelector(href)
                       if (target) {
                         const navHeight = document.querySelector('.navigation').offsetHeight
-                        const targetPosition = target.offsetTop - navHeight - 20
+                        const targetPosition = target.offsetTop - navHeight - 120
 
                         window.scrollTo({
                           top: targetPosition,
