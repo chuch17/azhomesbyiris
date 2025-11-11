@@ -247,8 +247,8 @@ async function resolveEmailSettings() {
     // Recipient comes exclusively from the config file (managed via admin panel).
     return {
         senderEmail: process.env.EMAIL_SENDER || '',
-        apiKey: process.env.EMAIL_SMTP_USER || '',
-        apiSecret: process.env.EMAIL_APP_PASSWORD || '',
+        apiKey: process.env.EMAIL_API_KEY || process.env.EMAIL_SMTP_USER || '',
+        apiSecret: process.env.EMAIL_API_SECRET || process.env.EMAIL_APP_PASSWORD || '',
         recipientEmail: fileConfig.recipientEmail || '',
     };
 }
@@ -355,7 +355,7 @@ app.get('/api/email/settings', async (req, res) => {
             // Recipient is the only value from the file.
             recipientEmail: config.recipientEmail,
             // Indicates whether API credentials are present.
-            hasPassword: !!(process.env.EMAIL_APP_PASSWORD)
+            hasPassword: !!(process.env.EMAIL_API_SECRET || process.env.EMAIL_APP_PASSWORD)
         });
     } catch (error) {
         res.status(500).json({ error: 'Failed to read email settings.' });
