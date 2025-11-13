@@ -148,18 +148,26 @@
       statusEl.style.color = 'inherit';
 
       const dataToSave = {
-        'video-1-title': elements.v1.title.value,
-        'video-1-url': elements.v1.url.value,
-        'video-1-duration': elements.v1.duration.value,
-        'video-2-title': elements.v2.title.value,
-        'video-2-url': elements.v2.url.value,
-        'video-2-duration': elements.v2.duration.value,
-        'video-3-title': elements.v3.title.value,
-        'video-3-url': elements.v3.url.value,
-        'video-3-duration': elements.v3.duration.value,
-        'video-4-title': elements.v4.title.value,
-        'video-4-url': elements.v4.url.value,
-        'video-4-duration': elements.v4.duration.value,
+        v1: {
+          title: elements.v1.title.value,
+          url: elements.v1.url.value,
+          duration: elements.v1.duration.value,
+        },
+        v2: {
+          title: elements.v2.title.value,
+          url: elements.v2.url.value,
+          duration: elements.v2.duration.value,
+        },
+        v3: {
+          title: elements.v3.title.value,
+          url: elements.v3.url.value,
+          duration: elements.v3.duration.value,
+        },
+        v4: {
+          title: elements.v4.title.value,
+          url: elements.v4.url.value,
+          duration: elements.v4.duration.value,
+        },
       };
 
       fetch('/api/video-gallery', {
